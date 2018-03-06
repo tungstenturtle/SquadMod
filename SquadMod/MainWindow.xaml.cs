@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NAudio.Midi;
 
 namespace SquadMod
 {
@@ -23,6 +24,16 @@ namespace SquadMod
         public MainWindow()
         {
             InitializeComponent();
+
+            for (int device = 0; device < MidiOut.NumberOfDevices; device++)
+            {
+                midiPortCombo.Items.Add(MidiOut.DeviceInfo(device).ProductName);
+            }
+        }
+
+        private void addRule_Click(object sender, RoutedEventArgs e)
+        {
+            ruleStack.Children.Add(new SquadMod.ModulationRuleDataRow());
         }
     }
 }
