@@ -78,6 +78,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MidiOutConverter.cs" />
     <Compile Include="ModulationRule.cs" />
     <Compile Include="ModulationRuleDataRow.xaml.cs">
       <DependentUpon>ModulationRuleDataRow.xaml</DependentUpon>

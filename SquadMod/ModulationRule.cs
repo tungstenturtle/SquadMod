@@ -10,15 +10,16 @@ using System.Runtime.CompilerServices;
 
 namespace SquadMod
 {
-    class ModulationRule : INotifyPropertyChanged
+    public class ModulationRule : INotifyPropertyChanged
     {
-        private Vector3D startVector;
-        private Vector3D endVector;
-        private bool ruleEnabled;
-        private int midiCC;
-        private int divisions;
-        private int channel;
-        private string name;
+        protected Vector3D startVector;
+        protected Vector3D endVector;
+        protected bool ruleEnabled;
+        protected bool processZ;
+        protected int midiCC;
+        protected int divisions;
+        protected int channel;
+        protected string name;
 
         public Vector3D StartVector
         {
@@ -49,7 +50,17 @@ namespace SquadMod
                 OnPropertyChanged();
             }
         }
-        
+
+        public bool ProcessZ
+        {
+            get { return processZ; }
+            set
+            {
+                processZ = value;
+                OnPropertyChanged();
+            }
+        }
+
         public int MidiCC
         {
             get { return midiCC; }
@@ -111,10 +122,11 @@ namespace SquadMod
             this.Name = "New Rule";
         }
 
-        public void Evaluate(Vector3D vector, MidiOut midiOut)
+        public virtual void Evaluate(Vector3D vector, MidiOut midiOut)
         {
-            if (!ruleEnabled) return;
-          
+            if (!ruleEnabled || midiOut == null) return;
+            if (!processZ) vector.Z = 0;
+
             Vector3D resultant = Vector3D.Subtract(endVector, startVector);
             Vector3D projection = Vector3D.DotProduct(vector, resultant) / resultant.LengthSquared * resultant;
 
@@ -122,13 +134,17 @@ namespace SquadMod
             if (outputValue < 0) outputValue = 0;
             if (outputValue > 127) outputValue = 127;
 
-            ControlChangeEvent controlEvent = new ControlChangeEvent(0, channel, (MidiController)midiCC, outputValue);
+            SendEvent(midiOut, outputValue);
+        }
 
+        protected void SendEvent(MidiOut midiOut, int outputValue)
+        {
+            ControlChangeEvent controlEvent = new ControlChangeEvent(0, channel, (MidiController)midiCC, outputValue);
             midiOut.Send(controlEvent.GetAsShortMessage());
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string caller = "")
+        protected void OnPropertyChanged([CallerMemberName] string caller = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(caller));
         }

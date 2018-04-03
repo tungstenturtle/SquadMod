@@ -21,15 +21,18 @@ namespace SquadMod
     /// </summary>
     public partial class ModulationRuleDataRow : UserControl
     {
-        ModulationRule boundRule = new ModulationRule();
+        private ModulationRule boundRule = new ModulationRule();
+        public ModulationRule BoundRule { get { return boundRule; } }
+
         public ModulationRuleDataRow()
         {
             InitializeComponent();
-
+            
             for (int i = 1; i < 17; i++)
                 channelCombo.Items.Add(i.ToString());
-
+             
             DataContext = boundRule;
+            channelCombo.SelectedItem = boundRule.Channel.ToString();
         }
 
         private void deleteButton_Click(object sender, RoutedEventArgs e)
@@ -39,14 +42,12 @@ namespace SquadMod
 
         private void setStartButton_Click(object sender, RoutedEventArgs e)
         {
-            boundRule.StartVector = new Vector3D(300, 4, 5);
+            boundRule.StartVector = new Vector3D(63, 63, 0);
         }
 
         private void setEndButton_Click(object sender, RoutedEventArgs e)
         {
-            boundRule.EndVector = new Vector3D(3, 4, 5);
+            boundRule.EndVector = new Vector3D(190, 190, 0);
         }
-
-
     }
 }
