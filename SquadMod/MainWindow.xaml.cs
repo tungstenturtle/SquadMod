@@ -32,8 +32,7 @@ namespace SquadMod
             get { return midiOut; }
             set
             {
-                if (midiOut != null)
-                    midiOut.Dispose();
+                if (midiOut != null) midiOut.Dispose();
                 midiOut = value;
             }
         }

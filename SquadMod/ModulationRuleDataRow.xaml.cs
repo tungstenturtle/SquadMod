@@ -27,10 +27,12 @@ namespace SquadMod
         public ModulationRuleDataRow()
         {
             InitializeComponent();
-            
+
             for (int i = 1; i < 17; i++)
+            {
                 channelCombo.Items.Add(i.ToString());
-             
+            }
+
             DataContext = boundRule;
             channelCombo.SelectedItem = boundRule.Channel.ToString();
         }
