@@ -2,29 +2,33 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Windows.Media.Media3D;
-using System.Threading;
 using System.Threading.Tasks;
 
 struct RadioData
 {
+    public RadioData(int tagID, Vector3D position)
+    {
+        this.TagID = tagID;
+        this.Position = position;
+    }
 
-    public int tagID;
-    public Vector3D position;
+    public int TagID { get; set; }
+    public Vector3D Position { get; set; }
 }
 
 public class UDPListener
 {
-    int listenport;
-    UdpClient listener;
-    RadioData[] radioData;
-    int bufferPtr;   //used to point to the next location to store data in circular buffer
-    int currentData; //used as an index to get the next unread point
-    bool done;      //flag used to stop the listen() method potentially because it runs seperately from the rest of the program
+    private int listenPort;
+    private UdpClient listener;
+    private RadioData[] radioData;
+    private int bufferPtr;   //used to point to the next location to store data in circular buffer
+    private int currentData; //used as an index to get the next unread point
+    private bool done;      //flag used to stop the listen() method potentially because it runs seperately from the rest of the program
     
     public UDPListener(int port_num)
     {
-        listenport = port_num;
-        listener = new UdpClient(listenport);
+        listenPort = port_num;
+        listener = new UdpClient(listenPort);
         radioData = new RadioData[10];
         bufferPtr = 0;
         currentData = 0;
@@ -52,10 +56,17 @@ public class UDPListener
                     //IPEndPoint object will allow us to read datagrams sent from any source.
                     var receivedBytes = await listener.ReceiveAsync();
                     byte[] data = receivedBytes.Buffer;
-                    radioData[bufferPtr].tagID = BitConverter.ToInt32(data, 0); //returns a 32-bit int from 4 bytes of byte[]
-                    radioData[bufferPtr].position.X = BitConverter.ToDouble(data, 4);//starting 4 bytes in byte[], reads 8 bytes and converts to a double   
-                    radioData[bufferPtr].position.Y = BitConverter.ToDouble(data, 12);
-                    radioData[bufferPtr].position.Z = BitConverter.ToDouble(data, 20);
+
+                    int tagID;
+                    double x, y, z;
+
+                    tagID = BitConverter.ToInt32(data, 0); //returns a 32-bit int from 4 bytes of byte[]
+                    x = BitConverter.ToDouble(data, 4); //starting 4 bytes in byte[], reads 8 bytes and converts to a double   
+                    y = BitConverter.ToDouble(data, 12);
+                    z = BitConverter.ToDouble(data, 20);
+
+                    radioData[bufferPtr] = new RadioData(tagID, new Vector3D(x, y, z));
+                    
                     bufferPtr = (bufferPtr + 1) % 10;
                 }
             }
@@ -67,7 +78,7 @@ public class UDPListener
         Vector3D data;
         try
         {
-            data = radioData[currentData].position; //!Concern: What if no data has been stored yet?
+            data = radioData[currentData].Position; //!Concern: What if no data has been stored yet?
         }
         catch
         {

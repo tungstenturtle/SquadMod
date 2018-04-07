@@ -12,14 +12,14 @@ namespace SquadMod
 {
     public class ModulationRule : INotifyPropertyChanged
     {
-        protected Vector3D startVector;
-        protected Vector3D endVector;
-        protected bool ruleEnabled;
-        protected bool processZ;
-        protected int midiCC;
-        protected int divisions;
-        protected int channel;
-        protected string name;
+        private Vector3D startVector;
+        private Vector3D endVector;
+        private bool ruleEnabled;
+        private bool processZ;
+        private int midiCC;
+        private int divisions;
+        private int channel;
+        private string name;
 
         public Vector3D StartVector
         {
