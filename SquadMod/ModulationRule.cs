@@ -125,9 +125,15 @@ namespace SquadMod
         public virtual void Evaluate(Vector3D vector, MidiOut midiOut)
         {
             if (!ruleEnabled || midiOut == null) return;
-            if (!processZ) vector.Z = 0;
 
             Vector3D resultant = Vector3D.Subtract(endVector, startVector);
+
+            if(!processZ)
+            {
+                resultant.Z = 0;
+                vector.Z = 0;
+            }
+
             Vector3D projection = Vector3D.DotProduct(vector, resultant) / resultant.LengthSquared * resultant;
 
             int outputValue = (int)((projection.Length / resultant.Length) * divisions);

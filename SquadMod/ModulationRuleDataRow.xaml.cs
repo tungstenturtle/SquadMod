@@ -21,6 +21,7 @@ namespace SquadMod
     /// </summary>
     public partial class ModulationRuleDataRow : UserControl
     {
+        private UDPListener networkConnection = UDPListener.Instance;
         private ModulationRule boundRule = new ModulationRule();
         public ModulationRule BoundRule { get { return boundRule; } }
 
@@ -44,12 +45,12 @@ namespace SquadMod
 
         private void setStartButton_Click(object sender, RoutedEventArgs e)
         {
-            boundRule.StartVector = new Vector3D(63, 63, 0);
+            boundRule.StartVector = networkConnection.NextPoint();
         }
 
         private void setEndButton_Click(object sender, RoutedEventArgs e)
         {
-            boundRule.EndVector = new Vector3D(190, 190, 0);
+            boundRule.EndVector = networkConnection.NextPoint();
         }
     }
 }

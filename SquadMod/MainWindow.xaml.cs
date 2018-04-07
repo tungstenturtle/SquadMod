@@ -24,6 +24,7 @@ namespace SquadMod
     /// </summary>
     public partial class MainWindow : Window
     {
+        private UDPListener networkConnection = UDPListener.Instance;
         private MidiOut midiOut;
         private Timer timer;
 
@@ -97,13 +98,14 @@ namespace SquadMod
         {
             foreach (ModulationRuleDataRow dataRow in ruleStack.Children)
             {
-                dataRow.BoundRule.Evaluate(new Vector3D(63, 63, 0), midiOut);                    
+                dataRow.BoundRule.Evaluate(networkConnection.NextPoint(), midiOut);                    
             }
         }
 
         void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            if (midiOut != null) midiOut.Dispose();
+            if (midiOut != null) midiOut.Close();
+            networkConnection.Close();
         }
     }
 }
