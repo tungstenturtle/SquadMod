@@ -33,7 +33,7 @@ namespace SquadMod
             get { return midiOut; }
             set
             {
-                if (midiOut != null) midiOut.Dispose();
+                if (midiOut != null) midiOut.Close();
                 midiOut = value;
             }
         }
@@ -56,11 +56,15 @@ namespace SquadMod
 
             intervalTextBox.DataContext = timer;
 
+            this.Closing += MainWindow_Closing;
+
             EventManager.RegisterClassHandler(typeof(TextBox), UIElement.PreviewMouseLeftButtonDownEvent,
                 new MouseButtonEventHandler(SelectivelyHandleMouseButton), true);
 
             EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotKeyboardFocusEvent,
                 new RoutedEventHandler(SelectAllText), true);
+
+            networkConnection.Listen();
         }
 
         private void SelectivelyHandleMouseButton(object sender, MouseButtonEventArgs e)
@@ -105,6 +109,8 @@ namespace SquadMod
         void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             if (midiOut != null) midiOut.Close();
+
+            networkConnection.Stop();
             networkConnection.Close();
         }
     }

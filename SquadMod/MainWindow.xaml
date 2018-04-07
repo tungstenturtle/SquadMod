@@ -78,7 +78,8 @@
             
             <Label Content="Midi Port:" FontSize="12" Foreground="White"/>
             <ComboBox Name="midiPortCombo" Height="25" Width="Auto"  
-                      SelectedIndex="{Binding MidiOut, Mode=TwoWay, Converter={StaticResource MidiOutConverter}}"/>
+                      SelectedIndex="{Binding MidiOut, Mode=TwoWay, Converter={StaticResource MidiOutConverter}}"
+                      HorizontalContentAlignment="Left"/>
             <Label Content="Timer (ms):" FontSize="12" Foreground="White"/>
             <TextBox Name="intervalTextBox" Height="25" Text="{Binding Interval, Mode=TwoWay}" Width="33" MaxLength="4"/>
             <Button Name="addRuleButton" Content="Add New Rule" Height="25" Width="Auto" Click="addRuleButton_Click" />
