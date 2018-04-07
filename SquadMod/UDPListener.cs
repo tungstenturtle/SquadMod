@@ -22,8 +22,8 @@ namespace SquadMod
     {
         private static UDPListener instance;
 
-        private int listenPort;
-        private UdpClient listener = new UdpClient(45454);
+        private static readonly int listenPort = 51515;
+        private UdpClient listener = new UdpClient(listenPort);
         private RadioData[] radioData = new RadioData[10];
         private int bufferPtr;   //used to point to the next location to store data in circular buffer
         private int currentData; //used as an index to get the next unread point
