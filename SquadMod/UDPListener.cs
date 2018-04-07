@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using System.BitConverter;
-using System.Windows.Media.Media3D.Vector3D;
+using System.Windows.Media.Media3D;
+using System.Threading;
+using System.Threading.Tasks;
 
 struct RadioData
 {
-    int tagID;
-    Vector3D position;
+
+    public int tagID;
+    public Vector3D position;
 }
 
 public class UDPListener
 {
     int listenport;
-    byte[] receivedBytes;
     UdpClient listener;
     RadioData[] radioData;
     int bufferPtr;   //used to point to the next location to store data in circular buffer
@@ -40,7 +41,7 @@ public class UDPListener
             radioData[bufferPtr].position.z = BitConverter.ToDouble(receivedBytes, 20);
         }
     */
-    private static void Listen()
+    private void Listen()
     {
         Task.Run(async () =>
         {
@@ -49,11 +50,12 @@ public class UDPListener
                 while (!done)
                 {
                     //IPEndPoint object will allow us to read datagrams sent from any source.
-                    receivedBytes = await listener.ReceiveAsync();
-                    radioData[bufferPtr].tagID = BitConverter.ToInt32(receivedBytes, 0); //returns a 32-bit int from 4 bytes of byte[]
-                    radioData[bufferPtr].position.x = BitConverter.ToDouble(receivedBytes, 4);//starting 4 bytes in byte[], reads 8 bytes and converts to a double   
-                    radioData[bufferPtr].position.y = BitConverter.ToDouble(receivedBytes, 12);
-                    radioData[bufferPtr].position.z = BitConverter.ToDouble(receivedBytes, 20);
+                    var receivedBytes = await listener.ReceiveAsync();
+                    byte[] data = receivedBytes.Buffer;
+                    radioData[bufferPtr].tagID = BitConverter.ToInt32(data, 0); //returns a 32-bit int from 4 bytes of byte[]
+                    radioData[bufferPtr].position.X = BitConverter.ToDouble(data, 4);//starting 4 bytes in byte[], reads 8 bytes and converts to a double   
+                    radioData[bufferPtr].position.Y = BitConverter.ToDouble(data, 12);
+                    radioData[bufferPtr].position.Z = BitConverter.ToDouble(data, 20);
                     bufferPtr = (bufferPtr + 1) % 10;
                 }
             }
