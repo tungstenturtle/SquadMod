@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 using NAudio.Midi;
 using System.Windows.Media.Media3D;
+using System.Runtime.CompilerServices;
+
 using System.Timers;
 
 namespace SquadMod
@@ -22,11 +24,12 @@ namespace SquadMod
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private UDPListener networkConnection = UDPListener.Instance;
         private MidiOut midiOut;
         private Timer timer;
+        private bool enabled;
 
         public MidiOut MidiOut
         {
@@ -35,10 +38,19 @@ namespace SquadMod
             {
                 if (midiOut != null) midiOut.Close();
                 midiOut = value;
+                OnPropertyChanged();
             }
         }
 
-        public bool Enabled { get; set; }
+        public bool Enabled
+        {
+            get { return enabled; }
+            set
+            {
+                enabled = value;
+                OnPropertyChanged();
+            }
+        }
 
         public MainWindow()
         {
@@ -104,18 +116,34 @@ namespace SquadMod
 
         private void CallRules()
         {
+            Vector3D nextPoint = networkConnection.NextPoint();
             foreach (ModulationRuleDataRow dataRow in ruleStack.Children)
             {
-                dataRow.BoundRule.Evaluate(networkConnection.NextPoint(), midiOut);                    
+                dataRow.BoundRule.Evaluate(nextPoint, midiOut);                    
             }
         }
 
         void MainWindow_Closing(object sender, CancelEventArgs e)
         {
+            Enabled = false;
+            System.Threading.Thread.Sleep(500); // wait for the timer thread to stop executing
+
             if (midiOut != null) midiOut.Close();
+
+            //foreach (ModulationRuleDataRow dataRow in ruleStack.Children)
+            //{
+            //    dataRow.BoundRule.ExportEvents();
+            //}
 
             networkConnection.Stop();
             networkConnection.Close();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string caller = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(caller));
         }
     }
 }

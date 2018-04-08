@@ -20,6 +20,7 @@ namespace SquadMod
         private int divisions;
         private int channel;
         private string name;
+       // private MidiEventCollection eventCollection = new MidiEventCollection(0, 60);
 
         public Vector3D StartVector
         {
@@ -147,8 +148,18 @@ namespace SquadMod
         protected void SendEvent(MidiOut midiOut, int outputValue)
         {
             ControlChangeEvent controlEvent = new ControlChangeEvent(0, channel, (MidiController)midiCC, outputValue);
+           // eventCollection.AddEvent(controlEvent, 0);
             midiOut.Send(controlEvent.GetAsShortMessage());
         }
+
+        //public void ExportEvents()
+        //{
+
+        //    eventCollection.AddEvent(new NoteEvent(0, 1, MidiCommandCode.NoteOn, 10, 100),0);
+        //    eventCollection.AddEvent(new NoteEvent(200, 1, MidiCommandCode.NoteOn, 10, 0), 0);
+        //    eventCollection.PrepareForExport();
+        //    MidiFile.Export("D:\\Events_" + this.name + ".mid", eventCollection);
+        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string caller = "")
