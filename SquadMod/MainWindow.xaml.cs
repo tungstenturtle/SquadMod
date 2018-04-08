@@ -119,7 +119,8 @@ namespace SquadMod
             Vector3D nextPoint = networkConnection.NextPoint();
             foreach (ModulationRuleDataRow dataRow in ruleStack.Children)
             {
-                dataRow.BoundRule.Evaluate(nextPoint, midiOut);                    
+                dataRow.BoundRule.Evaluate(nextPoint, midiOut);
+                if (!Enabled) break;                    
             }
         }
 
@@ -127,7 +128,7 @@ namespace SquadMod
         {
             Enabled = false;
             System.Threading.Thread.Sleep(500); // wait for the timer thread to stop executing
-
+           
             if (midiOut != null) midiOut.Close();
 
             //foreach (ModulationRuleDataRow dataRow in ruleStack.Children)
