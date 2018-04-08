@@ -27,6 +27,7 @@ namespace SquadMod
         private UdpClient listener = OpenConnection();
         private Queue<RadioData> dataBuffer = new Queue<RadioData>(10);
         private bool done;      //flag used to stop the listen() method potentially because it runs seperately from the rest of the program
+        private Vector3D defaultVector = new Vector3D(0, 0, 0);
 
         private UDPListener() { }
 
@@ -89,7 +90,7 @@ namespace SquadMod
             }
             catch
             {
-                return new Vector3D(0, 0, 0);
+                return defaultVector;
             }
         }
 

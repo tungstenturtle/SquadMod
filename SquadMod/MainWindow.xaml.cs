@@ -38,6 +38,8 @@ namespace SquadMod
             }
         }
 
+        public bool Enabled { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -49,6 +51,8 @@ namespace SquadMod
 
             midiPortCombo.SelectedIndex = 0;
             midiPortCombo.DataContext = this;
+
+            enableButton.DataContext = this;
 
             timer = new Timer();
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
@@ -95,7 +99,7 @@ namespace SquadMod
 
         private void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            ruleStack.Dispatcher.Invoke(CallRules);
+            if(Enabled) ruleStack.Dispatcher.Invoke(CallRules);
         }
 
         private void CallRules()

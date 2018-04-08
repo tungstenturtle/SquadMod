@@ -74,6 +74,7 @@
                 <Style TargetType="ComboBox" BasedOn="{StaticResource Default}"/>
                 <Style TargetType="TextBox" BasedOn="{StaticResource Default}"/>
                 <Style TargetType="Button" BasedOn="{StaticResource Default}"/>
+                <Style TargetType="ToggleButton" BasedOn="{StaticResource Default}"/>
             </StackPanel.Resources>
             
             <Label Content="Midi Port:" FontSize="12" Foreground="White"/>
@@ -83,6 +84,8 @@
             <Label Content="Timer (ms):" FontSize="12" Foreground="White"/>
             <TextBox Name="intervalTextBox" Height="25" Text="{Binding Interval, Mode=TwoWay}" Width="33" MaxLength="4"/>
             <Button Name="addRuleButton" Content="Add New Rule" Height="25" Width="Auto" Click="addRuleButton_Click" />
+            <ToggleButton Name="enableButton" Width="75" Height="25" Content="Enable" HorizontalAlignment="Right"
+                          IsChecked="{Binding Enabled, Mode=TwoWay}"/>
         </StackPanel>
         <ScrollViewer VerticalScrollBarVisibility="Visible" Background="White">
             <StackPanel Name ="ruleStack" Orientation="Vertical">
