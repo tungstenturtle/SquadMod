@@ -82,10 +82,10 @@ namespace SquadMod
             get { return divisions; }
             set
             {
-                if (value < 0)
-                    divisions = 0;
-                else if (value > 127)
-                    divisions = 127;
+                if (value < 1)
+                    divisions = 1;
+                else if (value > 128)
+                    divisions = 128;
                 else
                     divisions = value;
 
@@ -117,7 +117,7 @@ namespace SquadMod
             this.EndVector = new Vector3D();
             this.RuleEnabled = false;
             this.MidiCC = 0;
-            this.Divisions = 0;
+            this.Divisions = 1;
             this.Channel = 1;
             this.Name = "New Rule";
         }
@@ -136,9 +136,10 @@ namespace SquadMod
 
             Vector3D projection = Vector3D.DotProduct(vector, resultant) / resultant.LengthSquared * resultant;
 
-            int outputValue = (int)((projection.Length / resultant.Length) * divisions);
+            int outputValue = (int)((projection.Length / resultant.Length) * (divisions - 1));
+
             if (outputValue < 0) outputValue = 0;
-            if (outputValue > 127) outputValue = 127;
+            else if (outputValue > 127) outputValue = 127;
 
             SendEvent(midiOut, outputValue);
         }
