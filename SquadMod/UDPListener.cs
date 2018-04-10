@@ -49,8 +49,6 @@ namespace SquadMod
             UdpClient client = new UdpClient();
             client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             client.Client.Bind(endPoint);
-            
-            client.Connect(endPoint);
 
             return client;
         }
@@ -58,7 +56,6 @@ namespace SquadMod
         public void Listen()
         {
             done = false;
-            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), listenPort);
             Task.Run(async () =>
             {
                 while (!done)
@@ -84,14 +81,8 @@ namespace SquadMod
 
         public Vector3D NextPoint()
         {
-            try
-            {
-                return dataBuffer.Dequeue().Position;
-            }
-            catch
-            {
-                return defaultVector;
-            }
+            try { return dataBuffer.Dequeue().Position; }
+            catch { return defaultVector; }
         }
 
         public void Stop() //kills the listen method by setting the flag to true

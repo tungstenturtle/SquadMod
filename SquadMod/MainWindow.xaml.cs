@@ -66,7 +66,7 @@ namespace SquadMod
 
             enableButton.DataContext = this;
 
-            timer = new Timer();
+            timer = new Timer(200);
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
             timer.Start();
 
@@ -120,7 +120,7 @@ namespace SquadMod
             foreach (ModulationRuleDataRow dataRow in ruleStack.Children)
             {
                 dataRow.BoundRule.Evaluate(nextPoint, midiOut);
-                if (!Enabled) break;                    
+                if (!Enabled) break;
             }
         }
 
