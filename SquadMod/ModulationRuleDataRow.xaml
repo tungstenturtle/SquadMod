@@ -24,11 +24,11 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1.1*"/>
             <ColumnDefinition Width="0.8*"/>
             <ColumnDefinition Width="0.8*"/>
             <ColumnDefinition Width="0.8*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1.1*"/>
             <ColumnDefinition Width="0.8*"/>
             <ColumnDefinition Width="0.8*"/>
             <ColumnDefinition Width="0.8*"/>

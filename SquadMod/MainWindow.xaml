@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SquadMod"
         mc:Ignorable="d"
-        Title="SquadMod" Height="390" Width="975" Background="RoyalBlue"
-        MinWidth="975"
+        Title="SquadMod" Height="390" Width="1000" Background="RoyalBlue"
+        MinWidth="1000"
         MinHeight="390">
     <Window.Resources>
         <local:MidiOutConverter x:Key="MidiOutConverter"/>
@@ -30,11 +30,11 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1.1*"/>
                 <ColumnDefinition Width="0.8*"/>
                 <ColumnDefinition Width="0.8*"/>
                 <ColumnDefinition Width="0.8*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1.1*"/>
                 <ColumnDefinition Width="0.8*"/>
                 <ColumnDefinition Width="0.8*"/>
                 <ColumnDefinition Width="0.8*"/>
