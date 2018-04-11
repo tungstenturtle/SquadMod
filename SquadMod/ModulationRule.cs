@@ -127,7 +127,7 @@ namespace SquadMod
         {
             if (!ruleEnabled || midiOut == null) return;
 
-            Vector3D resultant = Vector3D.Subtract(endVector, startVector);
+            Vector3D resultant = Vector3D.Subtract(startVector, endVector);
 
             if(!processZ)
             {
@@ -137,7 +137,7 @@ namespace SquadMod
 
             Vector3D projection = Vector3D.DotProduct(vector, resultant) / resultant.LengthSquared * resultant;
 
-            int outputValue = (int)((projection.Length / resultant.Length) * (divisions - 1));
+            int outputValue = (int)(Math.Round((projection.Length / resultant.Length)*divisions) / divisions * 127);
 
             if (outputValue < 0) outputValue = 0;
             else if (outputValue > 127) outputValue = 127;
