@@ -81,9 +81,11 @@
             <ComboBox Name="midiPortCombo" Height="25" Width="Auto"  
                       SelectedIndex="{Binding MidiOut, Mode=TwoWay, Converter={StaticResource MidiOutConverter}}"
                       HorizontalContentAlignment="Left"/>
+            <Button Name="addRuleButton" Content="Add New Rule" Height="25" Width="Auto" Click="addRuleButton_Click" />
+            <Button Name="saveButton" Content="Save Configuration" Height="25" Width="Auto" Click="saveButton_Click"/>
+            <Button Name="loadButton" Content="Load Configuration" Height="25" Width="Auto" Click="loadButton_Click"/>
             <Label Content="Timer (ms):" FontSize="12" Foreground="White"/>
             <TextBox Name="intervalTextBox" Height="25" Text="{Binding Interval, Mode=TwoWay}" Width="33" MaxLength="4"/>
-            <Button Name="addRuleButton" Content="Add New Rule" Height="25" Width="Auto" Click="addRuleButton_Click" />
             <ToggleButton Name="enableButton" Width="75" Height="25" Content="Enable" HorizontalAlignment="Right"
                           IsChecked="{Binding Enabled, Mode=TwoWay}"/>
         </StackPanel>

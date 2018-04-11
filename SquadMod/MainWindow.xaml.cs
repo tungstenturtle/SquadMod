@@ -146,5 +146,15 @@ namespace SquadMod
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(caller));
         }
+
+        private void saveButton_Click(object sender, RoutedEventArgs e)
+        {
+            SquadModIO.ExportRules(ruleStack.Children);
+        }
+
+        private void loadButton_Click(object sender, RoutedEventArgs e)
+        {
+            SquadModIO.ImportRules(ruleStack.Children);
+        }
     }
 }
