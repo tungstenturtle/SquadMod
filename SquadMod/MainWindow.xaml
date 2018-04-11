@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SquadMod"
         mc:Ignorable="d"
-        Title="SquadMod" Height="390" Width="1000" Background="RoyalBlue"
-        MinWidth="1000"
-        MinHeight="390">
+        Title="SquadMod" Height="400" Width="1050" Background="RoyalBlue"
+        MinWidth="1050"
+        MinHeight="400">
     <Window.Resources>
         <local:MidiOutConverter x:Key="MidiOutConverter"/>
     </Window.Resources>
@@ -31,14 +31,14 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="1.1*"/>
-                <ColumnDefinition Width="0.8*"/>
-                <ColumnDefinition Width="0.8*"/>
-                <ColumnDefinition Width="0.8*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="1.1*"/>
-                <ColumnDefinition Width="0.8*"/>
-                <ColumnDefinition Width="0.8*"/>
-                <ColumnDefinition Width="0.8*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1.5*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Rule Name" />
             <TextBlock Text="MIDI CC" Grid.Column="1"/>
@@ -81,9 +81,9 @@
             <ComboBox Name="midiPortCombo" Height="25" Width="Auto"  
                       SelectedIndex="{Binding MidiOut, Mode=TwoWay, Converter={StaticResource MidiOutConverter}}"
                       HorizontalContentAlignment="Left"/>
-            <Button Name="addRuleButton" Content="Add New Rule" Height="25" Width="Auto" Click="addRuleButton_Click" />
             <Button Name="saveButton" Content="Save Configuration" Height="25" Width="Auto" Click="saveButton_Click"/>
             <Button Name="loadButton" Content="Load Configuration" Height="25" Width="Auto" Click="loadButton_Click"/>
+            <Button Name="addRuleButton" Content="Add New Rule" Height="25" Width="Auto" Click="addRuleButton_Click" />
             <Label Content="Timer (ms):" FontSize="12" Foreground="White"/>
             <TextBox Name="intervalTextBox" Height="25" Text="{Binding Interval, Mode=TwoWay}" Width="33" MaxLength="4"/>
             <ToggleButton Name="enableButton" Width="75" Height="25" Content="Enable" HorizontalAlignment="Right"

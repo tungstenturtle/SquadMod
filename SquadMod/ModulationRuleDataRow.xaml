@@ -25,14 +25,14 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="1.1*"/>
-            <ColumnDefinition Width="0.8*"/>
-            <ColumnDefinition Width="0.8*"/>
-            <ColumnDefinition Width="0.8*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="1.1*"/>
-            <ColumnDefinition Width="0.8*"/>
-            <ColumnDefinition Width="0.8*"/>
-            <ColumnDefinition Width="0.8*"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1.5*"/>
         </Grid.ColumnDefinitions>
         <TextBox Text="{Binding Name, Mode=TwoWay}" 
                  Margin="5,5,5,5"/>
