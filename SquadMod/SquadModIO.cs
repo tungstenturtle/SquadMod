@@ -48,16 +48,24 @@ namespace SquadMod
                 }
                 catch(XmlException e)
                 {
-                    MessageBox.Show("Could not parse the XML file. " + e);
+                    MessageBox.Show("Could not parse the XML file. " + e, "SquadMod");
                     return;
                 }
 
-                ruleDataRowCollection.Clear();
-                
                 XmlNodeList ruleNodes = ruleConfigDocument.SelectNodes("//MODULATION_RULE");
-                foreach(XmlElement ruleElement in ruleNodes)
+
+                if (ruleNodes.Count > 0)
                 {
-                    ruleDataRowCollection.Add(CreateDataRow(ruleElement));
+                    ruleDataRowCollection.Clear();
+
+                    foreach (XmlElement ruleElement in ruleNodes)
+                    {
+                        ruleDataRowCollection.Add(CreateDataRow(ruleElement));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("The selected file does not contain any modulation rules.", "SquadMod");
                 }
             }
         }
