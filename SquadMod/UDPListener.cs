@@ -28,6 +28,7 @@ namespace SquadMod
         private Queue<RadioData> dataBuffer = new Queue<RadioData>(10);
         private bool done;      //flag used to stop the listen() method potentially because it runs seperately from the rest of the program
         private Vector3D defaultVector = new Vector3D(0, 0, 0);
+        private Vector3D lastPoint = new Vector3D(0, 0, 0);
 
         private UDPListener() { }
 
@@ -81,7 +82,7 @@ namespace SquadMod
 
         public Vector3D NextPoint()
         {
-            try { return dataBuffer.Dequeue().Position; }
+            try { lastPoint = dataBuffer.Dequeue().Position; return lastPoint; }
             catch { return defaultVector; }
         }
 
