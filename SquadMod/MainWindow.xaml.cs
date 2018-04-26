@@ -60,9 +60,11 @@ namespace SquadMod
             {
                 midiPortCombo.Items.Add(MidiOut.DeviceInfo(device).ProductName);
             }
-
-            midiPortCombo.SelectedIndex = 0;
+            
             midiPortCombo.DataContext = this;
+            midiPortCombo.SelectedIndex = 0;
+
+            this.MidiOut = new MidiOut(midiPortCombo.SelectedIndex);
 
             enableButton.DataContext = this;
 
@@ -79,7 +81,7 @@ namespace SquadMod
 
             EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotKeyboardFocusEvent,
                 new RoutedEventHandler(SelectAllText), true);
-
+             
             networkConnection.Listen();
         }
 
@@ -116,27 +118,26 @@ namespace SquadMod
 
         private void CallRules()
         {
+            if (midiOut == null) return;
+
+            int outputValue;
             Vector3D nextPoint = networkConnection.NextPoint();
             foreach (ModulationRuleDataRow dataRow in ruleStack.Children)
             {
-                dataRow.BoundRule.Evaluate(nextPoint, midiOut);
+                outputValue = dataRow.BoundRule.Evaluate(nextPoint);
+                if (outputValue != -1) { dataRow.BoundRule.SendEvent(midiOut, outputValue); }
+
                 if (!Enabled) break;
             }
         }
 
-        void MainWindow_Closing(object sender, CancelEventArgs e)
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             Enabled = false;
+            networkConnection.Stop();
             System.Threading.Thread.Sleep(500); // wait for the timer thread to stop executing
            
             if (midiOut != null) midiOut.Close();
-
-            //foreach (ModulationRuleDataRow dataRow in ruleStack.Children)
-            //{
-            //    dataRow.BoundRule.ExportEvents();
-            //}
-
-            networkConnection.Stop();
             networkConnection.Close();
         }
 

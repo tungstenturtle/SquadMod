@@ -20,7 +20,7 @@ namespace SquadMod
         private int divisions;
         private int channel;
         private string name;
-        //private MidiEventCollection eventCollection = new MidiEventCollection(0, 60);
+        private int outputValue;
 
         public Vector3D StartVector
         {
@@ -93,6 +93,7 @@ namespace SquadMod
                 OnPropertyChanged();
             }
         }
+
         public int Channel
         {
             get { return channel; }
@@ -102,6 +103,7 @@ namespace SquadMod
                 OnPropertyChanged();
             }
         }
+
         public string Name
         {
             get { return name; }
@@ -110,8 +112,27 @@ namespace SquadMod
                 name = value;
                 OnPropertyChanged();
             }
-        }        
+        }
 
+        public int OutputValue
+        {
+            get { return outputValue; }
+            set
+            {
+                if (value < 1)
+                    outputValue = 1;
+                else if (value > 127)
+                    outputValue = 127;
+                else
+                    outputValue = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Creates a new ModulationRule with default values
+        /// </summary>
         public ModulationRule()
         {
             this.StartVector = new Vector3D();
@@ -123,42 +144,51 @@ namespace SquadMod
             this.Name = "New Rule";
         }
 
-        public virtual void Evaluate(Vector3D vector, MidiOut midiOut)
+        /// <summary>
+        /// Computes the output value for a MIDI event based on a gradient from the start vector
+        /// to the end vector
+        /// </summary>
+        /// <param name="vector">the position to compute the value for</param>
+        /// <returns>The calculated value if the rule is enabled, otherwise -1</returns>
+        public virtual int Evaluate(Vector3D vector)
         {
-            if (!ruleEnabled || midiOut == null) return;
+            if (!ruleEnabled) return -1;
 
-            Vector3D resultant = Vector3D.Subtract(startVector, endVector);
+            Vector3D localVector = Vector3D.Subtract(vector, startVector);
+            Vector3D resultant = Vector3D.Subtract(endVector, startVector);
 
             if(!processZ)
             {
                 resultant.Z = 0;
-                vector.Z = 0;
+                localVector.Z = 0;
             }
 
-            Vector3D projection = Vector3D.DotProduct(vector, resultant) / resultant.LengthSquared * resultant;
+            Vector3D projection = Vector3D.DotProduct(localVector, resultant) / resultant.LengthSquared * resultant;
+            OutputValue = (int)(Math.Round((projection.Length / resultant.Length) * divisions) / divisions * 127);
 
-            int outputValue = (int)(Math.Round((projection.Length / resultant.Length) * divisions) / divisions * 127);
-
-            SendEvent(midiOut, outputValue);
+            return OutputValue;
         }
 
-        protected void SendEvent(MidiOut midiOut, int outputValue)
+        /// <summary>
+        /// Sends a midi control event
+        /// </summary>
+        /// <param name="midiOut">the MidiOut port to send the event to</param>
+        /// <param name="outputValue">the value to send</param>
+        public void SendEvent(MidiOut midiOut, int outputValue)
         {
             ControlChangeEvent controlEvent = new ControlChangeEvent(0, channel, (MidiController)midiCC, outputValue);
-            //eventCollection.AddEvent(controlEvent, 0);
             midiOut.Send(controlEvent.GetAsShortMessage());
         }
 
-        //public void ExportEvents()
-        //{
-
-        //    eventCollection.AddEvent(new NoteEvent(0, 1, MidiCommandCode.NoteOn, 10, 100), 0);
-        //    eventCollection.AddEvent(new NoteEvent(200, 1, MidiCommandCode.NoteOn, 10, 0), 0);
-        //    eventCollection.PrepareForExport();
-        //    MidiFile.Export("D:\\Events_" + this.name + ".mid", eventCollection);
-        //}
-
+        /// <summary>
+        /// PropertyChanged event to properly handle data binding
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// raises the PropertyChanged event
+        /// </summary>
+        /// <param name="caller">the caller of this method</param>
         protected void OnPropertyChanged([CallerMemberName] string caller = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(caller));

@@ -7,18 +7,36 @@ using System.Collections.Generic;
 
 namespace SquadMod
 {
+    /// <summary>
+    /// A struct to store data about the position of UWB radios
+    /// </summary>
     public struct RadioData
     {
+        /// <summary>
+        /// Creates a new RadioData struct with the given parameters
+        /// </summary>
+        /// <param name="tagID">the ID of the tag radio the point is from</param>
+        /// <param name="position">the position of the tag radio</param>
         public RadioData(int tagID, Vector3D position)
         {
             this.TagID = tagID;
             this.Position = position;
         }
 
+        /// <summary>
+        /// The tag's ID
+        /// </summary>
         public int TagID { get; set; }
+
+        /// <summary>
+        /// The tag's position
+        /// </summary>
         public Vector3D Position { get; set; }
     }
 
+    /// <summary>
+    /// Opens a UDP connection on port 51515 and stores
+    /// </summary>
     public class UDPListener
     {
         private static UDPListener instance;
@@ -26,12 +44,14 @@ namespace SquadMod
         private static readonly int listenPort = 51515;
         private UdpClient listener = OpenConnection();
         private Queue<RadioData> dataBuffer = new Queue<RadioData>(10);
-        private bool done;      //flag used to stop the listen() method potentially because it runs seperately from the rest of the program
-        private Vector3D defaultVector = new Vector3D(0, 0, 0);
+        private bool done;
         private Vector3D lastPoint = new Vector3D(0, 0, 0);
 
         private UDPListener() { }
 
+        /// <summary>
+        /// Returns an instance of UDPListener
+        /// </summary>
         public static UDPListener Instance
         {
             get
@@ -54,6 +74,9 @@ namespace SquadMod
             return client;
         }
 
+        /// <summary>
+        /// Listens for UDP messages. Adds any data to a data buffer
+        /// </summary>
         public void Listen()
         {
             done = false;
@@ -61,15 +84,15 @@ namespace SquadMod
             {
                 while (!done)
                 {
-                    //IPEndPoint object will allow us to read datagrams sent from any source.
                     var receivedBytes = await listener.ReceiveAsync();
                     byte[] data = receivedBytes.Buffer;
 
                     int tagID;
                     double x, y, z;
 
-                    tagID = BitConverter.ToInt32(data, 0); //returns a 32-bit int from 4 bytes of byte[]
-                    x = BitConverter.ToDouble(data, 4); //starting 4 bytes in byte[], reads 8 bytes and converts to a double   
+                    // Read the UDP datagram
+                    tagID = BitConverter.ToInt32(data, 0); 
+                    x = BitConverter.ToDouble(data, 4);
                     y = BitConverter.ToDouble(data, 12);
                     z = BitConverter.ToDouble(data, 20);
                     
@@ -80,17 +103,27 @@ namespace SquadMod
             });
         }
 
+        /// <summary>
+        /// Gets the next point from the data buffer. If it is empty, get the last point returned instead.
+        /// </summary>
+        /// <returns>the next point from the data buffer</returns>
         public Vector3D NextPoint()
         {
-            try { lastPoint = dataBuffer.Dequeue().Position; return lastPoint; }
-            catch { return defaultVector; }
+            try { return lastPoint = dataBuffer.Dequeue().Position; }
+            catch { return lastPoint; }
         }
-
-        public void Stop() //kills the listen method by setting the flag to true
+        
+        /// <summary>
+        /// Makes the UDPListener stop listening
+        /// </summary>
+        public void Stop()
         {
             done = true;
         }
 
+        /// <summary>
+        /// Closes the UDP connection
+        /// </summary>
         public void Close()
         {
             listener.Close();

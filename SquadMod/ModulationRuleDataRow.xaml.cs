@@ -38,6 +38,14 @@ namespace SquadMod
             channelCombo.SelectedItem = boundRule.Channel.ToString();
         }
 
+        public ModulationRuleDataRow(ModulationRule rule) : this()
+        {
+            boundRule = rule;
+
+            DataContext = boundRule;
+            channelCombo.SelectedItem = boundRule.Channel.ToString();
+        }
+
         private void deleteButton_Click(object sender, RoutedEventArgs e)
         {
             ((StackPanel)this.Parent).Children.Remove(this);

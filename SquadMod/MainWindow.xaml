@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SquadMod"
         mc:Ignorable="d"
-        Title="SquadMod" Height="400" Width="1050" Background="RoyalBlue"
-        MinWidth="1050"
+        Title="SquadMod" Height="400" Width="1100" Background="RoyalBlue"
+        MinWidth="1100"
         MinHeight="400">
     <Window.Resources>
         <local:MidiOutConverter x:Key="MidiOutConverter"/>
@@ -39,6 +39,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Rule Name" />
             <TextBlock Text="MIDI CC" Grid.Column="1"/>
@@ -52,6 +53,7 @@
             <TextBlock Text="X" Grid.Column="11"/>
             <TextBlock Text="Y" Grid.Column="12"/>
             <TextBlock Text="Z" Grid.Column="13"/>
+            <TextBlock Text="Output" Grid.Column="15"/>
         </Grid>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,5,0,0">
             
